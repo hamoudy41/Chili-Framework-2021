@@ -40,28 +40,32 @@ void Game::UpdateModel()
 {
 	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
 	{
-		x = x + 3;
+		vx = vx + 1;
 	}
 
 	if (wnd.kbd.KeyIsPressed(VK_LEFT))
 	{
-		x = x - 3;
+		vx = vx - 1;
 	}
 
 	if (wnd.kbd.KeyIsPressed(VK_DOWN))
 	{
-		y = y + 3;
+		vy = vy + 1;
 	}
 
 	if (wnd.kbd.KeyIsPressed(VK_UP))
 	{
-		y = y - 3;
+		vy = vy - 1;
 	}
 
 	if (wnd.kbd.KeyIsPressed(VK_CONTROL))
 	{
 		gb = 0;
 	}
+
+	x = x + vx;
+	y = y + vy;
+
 
 	shapeIsChanged = wnd.kbd.KeyIsPressed(VK_SHIFT);
 }

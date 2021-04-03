@@ -43,6 +43,8 @@ private:
 	int x = 400;
 	int y = 300;
 	int gb = 255;
+	int vx = 0;
+	int vy = 0;
 	bool shapeIsChanged = false;
 	/********************************/
 	/*  User Variables              */
