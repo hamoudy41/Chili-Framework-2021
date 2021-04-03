@@ -46,6 +46,10 @@ private:
 	int vx = 0;
 	int vy = 0;
 	bool shapeIsChanged = false;
+	bool inhibitUp = false;
+	bool inhibitDown = false;
+	bool inhibitRight = false;
+	bool inhibitLeft = false;
 	/********************************/
 	/*  User Variables              */
 	/********************************/
