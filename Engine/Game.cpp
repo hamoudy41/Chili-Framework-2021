@@ -47,12 +47,9 @@ void Game::UpdateModel()
 
 	if (rightIsPressed)
 	{
-		if (inhibitRight)
+		if (!inhibitRight)
 		{
-
-		}
-		else 
-		{
+			x_mobile = x_mobile + displacement;
 			vx = vx + 1;
 			inhibitRight = true;
 		}
@@ -65,12 +62,9 @@ void Game::UpdateModel()
 
 	if (leftIsPressed)
 	{
-		if (inhibitLeft)
+		if (!inhibitLeft)
 		{
-
-		}
-		else
-		{
+			x_mobile = x_mobile - displacement;
 			vx = vx - 1;
 			inhibitLeft = true;
 		}
@@ -83,12 +77,9 @@ void Game::UpdateModel()
 
 	if (downIsPressed)
 	{
-		if (inhibitDown)
+		if (!inhibitDown)
 		{
-
-		}
-		else
-		{
+			y_mobile = y_mobile + displacement;
 			vy = vy + 1;
 			inhibitDown = true;
 		}
@@ -101,12 +92,9 @@ void Game::UpdateModel()
 
 	if (upIsPressed)
 	{
-		if (inhibitUp)
+		if (!inhibitUp)
 		{
-
-		}
-		else
-		{
+			y_mobile = y_mobile - displacement;
 			vy = vy - 1;
 			inhibitUp = true;
 		}
@@ -118,118 +106,110 @@ void Game::UpdateModel()
 	}
 
 
-	x_mobile = x_mobile + vx;
-	y_mobile = y_mobile + vy;
+	x_mobile = ClampScreenX(x_mobile);
+	y_mobile = ClampScreenY(y_mobile);
 
-	if (x_mobile + 5 >= gfx.ScreenWidth)
-	{
-		x_mobile = gfx.ScreenWidth - 6;
-		vx = 0;
-	}
-
-	if (y_mobile + 5 >= gfx.ScreenHeight)
-	{
-		y_mobile = gfx.ScreenHeight - 6;
-		vy = 0;
-	}
-
-	if (x_mobile - 5 < 0)
-	{
-		x_mobile = 5;
-		vx = 0;
-	}
-
-	if (y_mobile - 5 < 0)
-	{
-		y_mobile = 5;
-		vy = 0;
-	}
-
-	
-	const int left_mobile = x_mobile - 5;
-	const int right_mobile = x_mobile + 5;
-	const int top_mobile = y_mobile - 5;
-	const int bottom_mobile = y_mobile + 5;
-	 
-	const int left_fixed = x_fixed - 5;
-	const int right_fixed = x_fixed + 5;
-	const int top_fixed = y_fixed - 5;
-	const int bottom_fixed = y_fixed + 5;
-
-	if (left_mobile < right_fixed &&
-		right_mobile > left_fixed &&
-		top_mobile < bottom_fixed &&
-		bottom_mobile > top_fixed)
-	{
-		collided = true;
-	}
-	else
-	{
-		collided = false;
-	}
+	collided =
+		OverlapTest(x_fixed0, y_fixed0, x_mobile, y_mobile) ||
+		OverlapTest(x_fixed1, y_fixed1, x_mobile, y_mobile) ||
+		OverlapTest(x_fixed2, y_fixed2, x_mobile, y_mobile) ||
+		OverlapTest(x_fixed3, y_fixed3, x_mobile, y_mobile);
 }
 
 void Game::ComposeFrame()
 {
-	const int r_fixed = 0;
-	const int g_fixed = 255;
-	const int b_fixed = 0;
-
-	gfx.PutPixel(-5 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-5 + x_fixed, -4 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-5 + x_fixed, -3 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-4 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-3 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-5 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-5 + x_fixed, 4 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-5 + x_fixed, 3 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-4 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(-3 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, -4 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, -3 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(4 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(3 + x_fixed, -5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, 4 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(5 + x_fixed, 3 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(4 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-	gfx.PutPixel(3 + x_fixed, 5 + y_fixed, r_fixed, g_fixed, b_fixed);
-
-
-	
-
-	gfx.PutPixel(-5 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-5 + x_mobile, -4 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-5 + x_mobile, -3 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-4 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-3 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-5 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-5 + x_mobile, 4 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-5 + x_mobile, 3 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-4 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(-3 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, -4 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, -3 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(4 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(3 + x_mobile, -5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, 4 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(5 + x_mobile, 3 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(4 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
-	gfx.PutPixel(3 + x_mobile, 5 + y_mobile, r_mobile, g_mobile, b_mobile);
+	GameBox(x_fixed0, y_fixed0, 0, 255, 0);
+	GameBox(x_fixed1, y_fixed1, 0, 255, 0);
+	GameBox(x_fixed2, y_fixed2, 0, 255, 0);
+	GameBox(x_fixed3, y_fixed3, 0, 255, 0);
 
 	if (collided)
 	{
-		g_mobile = 0;
-		b_mobile = 0;
-		r_mobile = 255;
+		GameBox(x_mobile, y_mobile, 255, 0, 0);
 	}
 	else
 	{
-		g_mobile = 255;
-		b_mobile = 255;
-		r_mobile = 255;
+		GameBox(x_mobile, y_mobile, 255, 255, 255);
+	}
+}
+
+void Game::GameBox(int x, int y, int r, int g, int b)
+{
+	gfx.PutPixel(-5 + x, -5 + y, r, g, b);
+	gfx.PutPixel(-5 + x, -4 + y, r, g, b);
+	gfx.PutPixel(-5 + x, -3 + y, r, g, b);
+	gfx.PutPixel(-4 + x, -5 + y, r, g, b);
+	gfx.PutPixel(-3 + x, -5 + y, r, g, b);
+	gfx.PutPixel(-5 + x, 5 + y, r, g, b);
+	gfx.PutPixel(-5 + x, 4 + y, r, g, b);
+	gfx.PutPixel(-5 + x, 3 + y, r, g, b);
+	gfx.PutPixel(-4 + x, 5 + y, r, g, b);
+	gfx.PutPixel(-3 + x, 5 + y, r, g, b);
+	gfx.PutPixel(5 + x, -5 + y, r, g, b);
+	gfx.PutPixel(5 + x, -4 + y, r, g, b);
+	gfx.PutPixel(5 + x, -3 + y, r, g, b);
+	gfx.PutPixel(4 + x, -5 + y, r, g, b);
+	gfx.PutPixel(3 + x, -5 + y, r, g, b);
+	gfx.PutPixel(5 + x, 5 + y, r, g, b);
+	gfx.PutPixel(5 + x, 4 + y, r, g, b);
+	gfx.PutPixel(5 + x, 3 + y, r, g, b);
+	gfx.PutPixel(4 + x, 5 + y, r, g, b);
+	gfx.PutPixel(3 + x, 5 + y, r, g, b);
+}
+
+bool Game::OverlapTest(int box0x, int box0y, int box1x, int box1y)
+{
+	const int left_mobile = box0x - 5;
+	const int right_mobile = box0x + 5;
+	const int top_mobile = box0y - 5;
+	const int bottom_mobile = box0y + 5;
+
+	const int left_fixed = box1x - 5;
+	const int right_fixed = box1x + 5;
+	const int top_fixed = box1y - 5;
+	const int bottom_fixed = box1y + 5;
+
+	return 
+		(left_mobile <= right_fixed &&
+		right_mobile >= left_fixed &&
+		top_mobile <= bottom_fixed &&
+		bottom_mobile >= top_fixed);
+}
+
+int Game::ClampScreenX(int x)
+{
+	const int left = x - 5;
+	const int right = x + 5;
+
+	if (right >= gfx.ScreenWidth)
+	{
+		return gfx.ScreenWidth - 6;
+	}
+	if (left < 0)
+	{
+		return 5;
+	}
+	else
+	{
+		return x;
+	}
+}
+
+int Game::ClampScreenY(int y)
+{
+	const int top = y - 5;
+	const int bottom = y + 5;
+
+	if (bottom >= gfx.ScreenWidth)
+	{
+		return gfx.ScreenWidth - 6;
+	}
+	if (top < 0)
+	{
+		return 5;
+	}
+	else
+	{
+		return y;
 	}
 }

@@ -37,19 +37,35 @@ private:
 	/********************************/
 	/*  User Functions              */
 	/********************************/
+	void GameBox(int x, int y, int r, int g, int b);
+	bool OverlapTest(int box0x, int box0y, int box1x, int box1y);
+	int ClampScreenX(int x);
+	int ClampScreenY(int y);
+
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	/********************************/
+	/*  User Variables              */
+	/********************************/
+	int x_mobile = 550;
+	int y_mobile = 450;
 
-	int x_mobile = 500;
-	int y_mobile = 400;
-	int x_fixed = 400;
-	int y_fixed = 300;
+	int x_fixed0 = 100;
+	int y_fixed0 = 300;
+	int x_fixed1 = 200;
+	int y_fixed1 = 300;
+	int x_fixed2 = 300;
+	int y_fixed2 = 300;
+	int x_fixed3 = 400;
+	int y_fixed3 = 300;
+
 	int r_mobile = 255;
 	int g_mobile = 255;
 	int b_mobile = 255;
 	int vx = 0;
 	int vy = 0;
+	int displacement = 3;
 
 	bool shapeIsChanged = false;
 	bool inhibitUp = false;
@@ -64,8 +80,4 @@ private:
 	bool upIsPressed = false;
 	bool downIsPressed = false;
 
-
-	/********************************/
-	/*  User Variables              */
-	/********************************/
 };
