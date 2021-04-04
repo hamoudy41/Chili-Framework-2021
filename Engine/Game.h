@@ -40,16 +40,31 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
-	int x = 400;
-	int y = 300;
-	int gb = 255;
+
+	int x_mobile = 500;
+	int y_mobile = 400;
+	int x_fixed = 400;
+	int y_fixed = 300;
+	int r_mobile = 255;
+	int g_mobile = 255;
+	int b_mobile = 255;
 	int vx = 0;
 	int vy = 0;
+
 	bool shapeIsChanged = false;
 	bool inhibitUp = false;
 	bool inhibitDown = false;
 	bool inhibitRight = false;
 	bool inhibitLeft = false;
+	bool collided = false;
+
+	bool colorIsChanged = false;
+	bool leftIsPressed = false;
+	bool rightIsPressed = false;
+	bool upIsPressed = false;
+	bool downIsPressed = false;
+
+
 	/********************************/
 	/*  User Variables              */
 	/********************************/
