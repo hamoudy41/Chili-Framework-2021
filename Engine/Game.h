@@ -37,10 +37,13 @@ private:
 	/********************************/
 	/*  User Functions              */
 	/********************************/
-	void GameBox(int x, int y, int r, int g, int b);
-	bool OverlapTest(int box0x, int box0y, int box1x, int box1y);
-	int ClampScreenX(int x);
-	int ClampScreenY(int y);
+	void DrawFace(int x, int y);
+	void DrawPoo(int x, int y);
+	void DrawGameOver(int x, int y);
+	void DrawTitleScreen(int x, int y);
+	int ClampScreenX(int x, int width);
+	int ClampScreenY(int y, int height);
+	bool isColliding(int x0, int y0, int width0, int height0, int x1, int y1, int width1, int height1);
 
 private:
 	MainWindow& wnd;
@@ -48,36 +51,26 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	int x_mobile = 550;
-	int y_mobile = 450;
+	int dudeX = 400;
+	int dudeY = 300;
 
-	int x_fixed0 = 100;
-	int y_fixed0 = 300;
-	int x_fixed1 = 200;
-	int y_fixed1 = 300;
-	int x_fixed2 = 300;
-	int y_fixed2 = 300;
-	int x_fixed3 = 400;
-	int y_fixed3 = 300;
+	int dudeHeight = 20;
+	int dudeWidth = 20;
 
-	int r_mobile = 255;
-	int g_mobile = 255;
-	int b_mobile = 255;
-	int vx = 0;
-	int vy = 0;
-	int displacement = 3;
+	int poo0X;
+	int poo0Y;
+	int poo1X;
+	int poo1Y;
+	int poo2X;
+	int poo2Y;
 
-	bool shapeIsChanged = false;
-	bool inhibitUp = false;
-	bool inhibitDown = false;
-	bool inhibitRight = false;
-	bool inhibitLeft = false;
-	bool collided = false;
+	int pooHeight = 24;
+	int pooWidth = 24;
 
-	bool colorIsChanged = false;
-	bool leftIsPressed = false;
-	bool rightIsPressed = false;
-	bool upIsPressed = false;
-	bool downIsPressed = false;
 
+	bool poo0IsEaten = false;
+	bool poo1IsEaten = false;
+	bool poo2IsEaten = false;
+
+	bool isStarted = false;
 };
