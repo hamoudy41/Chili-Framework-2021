@@ -22,6 +22,7 @@
 #include "Game.h"
 #include <random>
 
+
 using namespace std;
 
 Game::Game( MainWindow& wnd )
@@ -34,12 +35,22 @@ Game::Game( MainWindow& wnd )
 	uniform_int_distribution<int> xDist(0, 779);
 	uniform_int_distribution<int> yDist(0, 570);
 
-	poo0X = xDist(rng);
-	poo0Y = yDist(rng); 
-	poo1X = xDist(rng);
-	poo1Y = yDist(rng);
-	poo2X = xDist(rng);
-	poo2Y = yDist(rng);
+	poo0.x = xDist(rng);
+	poo0.y = yDist(rng); 
+	poo1.x = xDist(rng);
+	poo1.y = yDist(rng);
+	poo2.x = xDist(rng);
+	poo2.y = yDist(rng);
+
+	poo0.vx = 1;
+	poo0.vy = 1;
+	poo1.vx = -1;
+	poo1.vy = 1;
+	poo2.vx = 1;
+	poo2.vy = -1;
+
+	dude.x = 400;
+	dude.y = 300;
 }
 
 void Game::Go()
@@ -64,55 +75,36 @@ void Game::UpdateModel()
 	{
 		if (rightIsPressed)
 		{
-			dudeX += 1;
+			dude.x += 1;
 		}
 
 		if (leftIsPressed)
 		{
-			dudeX -= 1;
+			dude.x -= 1;
 		}
 
 
 		if (downIsPressed)
 		{
-			dudeY += 1;
+			dude.y += 1;
 		}
 
 
 		if (upIsPressed)
 		{
-			dudeY -= 1;
+			dude.y -= 1;
 		}
 
-		dudeX = ClampScreenX(dudeX, dudeWidth);
-		dudeY = ClampScreenY(dudeY, dudeHeight);
-
-		poo0X += poo0vx;
-		poo0Y += poo0vy;
-		poo1X += poo1vx;
-		poo1Y += poo1vy;
-		poo2X += poo2vx;
-		poo2Y += poo2vy;
-
-		Rebound(poo0X, poo0Y, pooWidth, pooHeight, poo0vx, poo0vy);
-		Rebound(poo1X, poo1Y, pooWidth, pooHeight, poo1vx, poo1vy);
-		Rebound(poo2X, poo2Y, pooWidth, pooHeight, poo2vx, poo2vy);
+		dude.ClampToScreen();
 		
+		poo0.Update();
+		poo1.Update();
+		poo2.Update();
+		
+		poo0.ProcessConsumption(dude.x, dude.y, dude.width, dude.height);
+		poo1.ProcessConsumption(dude.x, dude.y, dude.width, dude.height);
+		poo2.ProcessConsumption(dude.x, dude.y, dude.width, dude.height);
 
-		if (isColliding(dudeX, dudeY, dudeWidth, dudeHeight, poo0X, poo0Y, pooWidth, pooHeight))
-		{
-			poo0IsEaten = true;
-		}
-
-		if (isColliding(dudeX, dudeY, dudeWidth, dudeHeight, poo1X, poo1Y, pooWidth, pooHeight))
-		{
-			poo1IsEaten = true;
-		}
-
-		if (isColliding(dudeX, dudeY, dudeWidth, dudeHeight, poo2X, poo2Y, pooWidth, pooHeight))
-		{
-			poo2IsEaten = true;
-		}
 	}
 	else
 	{
@@ -28704,75 +28696,6 @@ void Game::DrawTitleScreen(int x, int y)
 	gfx.PutPixel(149 + x, 174 + y, 208, 34, 34);
 }
 
-void Game::Rebound(int& x, int& y, int width, int height, int& vx, int& vy)
-{
-	const int XOld = x;
-	const int YOld = y;
-
-	x = ClampScreenX(x, width);
-	y = ClampScreenY(y, height);
-
-	if (XOld != x)
-	{
-		vx = -vx;
-	}
-
-	if (YOld != y)
-	{
-		vy = -vy;
-	}
-}
-
-int Game::ClampScreenX(int x, int width)
-{
-	const int right = x + width;
-
-	if (x < 0)
-	{
-		return 0;
-	}
-	else if(right >= gfx.ScreenWidth)
-	{
-		return gfx.ScreenWidth - width -1;
-	}
-	else
-	{
-		return x;
-	}
-}
-
-int Game::ClampScreenY(int y, int height)
-{
-	const int bottom = y + height;
-
-	if (y < 0)
-	{
-		return 0;
-	}
-	else if (bottom >= gfx.ScreenHeight)
-	{
-		return gfx.ScreenHeight - height -1;
-	}
-	else
-	{
-		return y;
-	}
-}
-
-bool Game::isColliding(int x0, int y0, int width0, int height0, int x1, int y1, int width1, int height1)
-{
-	const int right0 = x0 + width0;
-	const int right1 = x1 + width1;
-	const int bottom0 = y0 + height0;
-	const int bottom1 = y1 + height1;
-
-	return
-		right0 >= x1 &&
-		x0 <= right1 &&
-		bottom0 >= y1 &&
-		y0 <= bottom1;
-}
-
 void Game::DrawFace(int x, int y)
 {
 	gfx.PutPixel(7 + x, 0 + y, 0, 0, 0);
@@ -29101,24 +29024,24 @@ void Game::ComposeFrame()
 	}
 	else
 	{
-		if (poo0IsEaten && poo1IsEaten && poo2IsEaten)
+		if (poo0.isEaten && poo1.isEaten && poo2.isEaten)
 		{
 			DrawGameOver(358, 268);
 		}
 
-		DrawFace(dudeX, dudeY);
+		DrawFace(dude.x, dude.y);
 
-		if (!poo0IsEaten)
+		if (!poo0.isEaten)
 		{
-			DrawPoo(poo0X, poo0Y);
+			DrawPoo(poo0.x, poo0.y);
 		}
-		if (!poo1IsEaten)
+		if (!poo1.isEaten)
 		{
-			DrawPoo(poo1X, poo1Y);
+			DrawPoo(poo1.x, poo1.y);
 		}
-		if (!poo2IsEaten)
+		if (!poo2.isEaten)
 		{
-			DrawPoo(poo2X, poo2Y);
+			DrawPoo(poo2.x, poo2.y);
 		}
 	}
 }		

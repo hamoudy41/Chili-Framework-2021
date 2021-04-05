@@ -23,6 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "Poo.h"
+#include "Dude.h"
 
 class Game
 {
@@ -41,9 +43,6 @@ private:
 	void DrawPoo(int x, int y);
 	void DrawGameOver(int x, int y);
 	void DrawTitleScreen(int x, int y);
-	void Rebound(int& x, int& y, int width, int height, int& vx, int& vy);
-	int ClampScreenX(int x, int width);
-	int ClampScreenY(int y, int height);
 	bool isColliding(int x0, int y0, int width0, int height0, int x1, int y1, int width1, int height1);
 
 private:
@@ -52,34 +51,12 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	int dudeX = 400;
-	int dudeY = 300;
 
-	int dudeHeight = 20;
-	int dudeWidth = 20;
+	Poo poo0;
+	Poo poo1;
+	Poo poo2;
 
-	int poo0X;
-	int poo0Y;
-	int poo1X;
-	int poo1Y;
-	int poo2X;
-	int poo2Y;
-
-	int poo0vx = 1;
-	int poo0vy = 1;
-	int poo1vx = -1;
-	int poo1vy = 1;
-	int poo2vx = 1;
-	int poo2vy = -1;
-
-
-	int pooHeight = 24;
-	int pooWidth = 24;
-
-
-	bool poo0IsEaten = false;
-	bool poo1IsEaten = false;
-	bool poo2IsEaten = false;
+	Dude dude;
 
 	bool isStarted = false;
 };
