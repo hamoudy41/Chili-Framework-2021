@@ -41,6 +41,7 @@ private:
 	void DrawPoo(int x, int y);
 	void DrawGameOver(int x, int y);
 	void DrawTitleScreen(int x, int y);
+	void Rebound(int& x, int& y, int width, int height, int& vx, int& vy);
 	int ClampScreenX(int x, int width);
 	int ClampScreenY(int y, int height);
 	bool isColliding(int x0, int y0, int width0, int height0, int x1, int y1, int width1, int height1);
@@ -63,6 +64,14 @@ private:
 	int poo1Y;
 	int poo2X;
 	int poo2Y;
+
+	int poo0vx = 1;
+	int poo0vy = 1;
+	int poo1vx = -1;
+	int poo1vy = 1;
+	int poo2vx = 1;
+	int poo2vy = -1;
+
 
 	int pooHeight = 24;
 	int pooWidth = 24;

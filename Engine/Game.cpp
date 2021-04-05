@@ -87,6 +87,18 @@ void Game::UpdateModel()
 		dudeX = ClampScreenX(dudeX, dudeWidth);
 		dudeY = ClampScreenY(dudeY, dudeHeight);
 
+		poo0X += poo0vx;
+		poo0Y += poo0vy;
+		poo1X += poo1vx;
+		poo1Y += poo1vy;
+		poo2X += poo2vx;
+		poo2Y += poo2vy;
+
+		Rebound(poo0X, poo0Y, pooWidth, pooHeight, poo0vx, poo0vy);
+		Rebound(poo1X, poo1Y, pooWidth, pooHeight, poo1vx, poo1vy);
+		Rebound(poo2X, poo2Y, pooWidth, pooHeight, poo2vx, poo2vy);
+		
+
 		if (isColliding(dudeX, dudeY, dudeWidth, dudeHeight, poo0X, poo0Y, pooWidth, pooHeight))
 		{
 			poo0IsEaten = true;
@@ -28690,6 +28702,25 @@ void Game::DrawTitleScreen(int x, int y)
 	gfx.PutPixel(147 + x, 174 + y, 208, 34, 34);
 	gfx.PutPixel(148 + x, 174 + y, 208, 34, 34);
 	gfx.PutPixel(149 + x, 174 + y, 208, 34, 34);
+}
+
+void Game::Rebound(int& x, int& y, int width, int height, int& vx, int& vy)
+{
+	const int XOld = x;
+	const int YOld = y;
+
+	x = ClampScreenX(x, width);
+	y = ClampScreenY(y, height);
+
+	if (XOld != x)
+	{
+		vx = -vx;
+	}
+
+	if (YOld != y)
+	{
+		vy = -vy;
+	}
 }
 
 int Game::ClampScreenX(int x, int width)
